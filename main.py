@@ -108,7 +108,7 @@ def my_sold_posts(id):
 
 @app.route("/<int:id>/buy/<int:post_id>/")
 def buy_post(post_id, id):
-    Post(post_id, None, None, None, None, None, None, user_bought = id).update_bought_post()
+    Post(post_id, None, None, None, None, None, None, user_bought=id).update_bought_post()
     return redirect('/{}/'.format(id))
 
 

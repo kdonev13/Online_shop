@@ -66,8 +66,8 @@ class Post:
     def update_bought_post(self):
         with DB() as db:
             buyer = (
-                self.post_id,
-                self.user_bought
+                self.user_bought,
+                self.post_id
             )
             db.execute('''
                         UPDATE posts SET user_bought = ?, is_active = False
