@@ -21,16 +21,22 @@ class User:
             return self
 
     @staticmethod
-    def find_by_email(email):
-        if not email:
-            return None
+    def find_by_id(id):
         with DB() as db:
-            row = db.execute(
-                'SELECT * FROM users WHERE username = ?',
-                (email,)
+            values = db.execute(
+                'SELECT * FROM users WHERE id = ?',
+                (id,)
             ).fetchone()
-            if row:
-                return User(*row)
+            return User(*values)
+
+    @staticmethod
+    def find_by_email(mail):
+        with DB() as db:
+            id = db.execute(
+                'SELECT * FROM users WHERE email = ?',
+                (mail,)
+            ).fetchone()
+            return id[0]
 
     @staticmethod
     def hash_password(password):

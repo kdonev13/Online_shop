@@ -1,17 +1,24 @@
 from database import DB
 from user import User
+from datetime import date
 
 
 class Post:
-    def __init__(self, post_id, title, description, owner, price, date_of_release, is_active, user_bought):
+    def __init__(self, post_id, title, description, price, owner, date=date.today(), is_active=True, user_bought=0):
         self.post_id = post_id
         self.title = title
         self.description = description
-        self.owner = owner
         self.price = price
-        self.date_of_release = date_of_release
+        self.owner = owner
+        self.date = date
         self.is_active = is_active
         self.user_bought = user_bought
+
+        self.values = (
+            self.post_id, self.title, self.description, self.price, self.owner, self.date, self.is_active,
+            self.user_bought)
+
+        self.edit_values = (self.title, self.description, self.price, self.post_id)
 
     @staticmethod
     def all():
@@ -20,57 +27,38 @@ class Post:
             return [Post(*row) for row in rows]
 
     @staticmethod
-    def find(post_id):
+    def find(id):
         with DB() as db:
             row = db.execute(
-                'SELECT * FROM posts WHERE id = ?',
-                (post_id,)
+                'SELECT * FROM posts WHERE post_id = ?',
+                (id,)
             ).fetchone()
             return Post(*row)
 
     def create(self):
         with DB() as db:
-            values = (
-                self.post_id, self.title, self.description, self.owner, self.price, self.date_of_release, True, None)
             db.execute('''
-                INSERT INTO posts (post_id, title, description, owner, price, date_of_release, is_active, user_bought)
-                VALUES (?, ?, ?, ?, ?, ?, ?)''', values)
+                INSERT INTO posts (post_id, title, description, price, owner, date, is_active, user_bought)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)''', self.values)
             return self
 
-    def save(self):
+    @staticmethod
+    def find_owner(owner):
         with DB() as db:
-            values = (
-                self.post_id,
-                self.title,
-                self.description,
-                self.owner,
-                self.price,
-                self.date_of_release,
-                self.is_active,
-                self.user_bought
-            )
-            db.execute(
-                '''UPDATE posts
-                SET post_id = ?, title = ?, description = ?, owner = ?, price = ?, date_of_release = ?, is_active = ?, user_bought = ?
-                WHERE post_id = ?''', values)
-            return self
+            username = db.execute(
+                '''
+                SELECT username FROM users 
+                WHERE id = ?
+                ''',
+                (owner,)).fetchone()
+        return username[0]
 
-    def update(self):
+    def edit(self):
         with DB() as db:
-            values = (self.title, self.description, self.price)
             db.execute('''
-                UPDATE INTO posts (title, description, price)
-                VALUES (?, ?, ?)''', values)
+            UPDATE posts SET title = ?, description = ?, price = ?
+             WHERE post_id = ?''', self.edit_values)
             return self
-
-    def buy(self):
-        with DB() as db:
-            buy_user = User
-            values = (self.is_active, self.user_bought)
-            db.execute('''
-                SET is_active = False, user_bought = buy_user 
-                WHERE post_id = ?''', values, buy_user)
-        return self
 
     def delete(self):
         with DB() as db:

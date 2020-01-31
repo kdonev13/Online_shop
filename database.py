@@ -21,12 +21,13 @@ CREATE TABLE IF NOT EXISTS posts
         post_id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT,
         description TEXT,
-        owner TEXT,
         price INTEGER,
-        date_of_release TEXT,
+        owner INTEGER,
+        date TEXT,
         is_active BOOL,
         user_bought INTEGER,
-        FOREIGN KEY(user_bought) REFERENCES users(user_id)
+        FOREIGN KEY(owner) REFERENCES users(id),
+        FOREIGN KEY(user_bought) REFERENCES users(id)
     )
 ''')
 
