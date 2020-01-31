@@ -53,6 +53,27 @@ class Post:
                 (owner,)).fetchone()
         return username[0]
 
+    @staticmethod
+    def find_buyer(buyer):
+        with DB() as db:
+            user = db.execute(
+                '''
+                SELECT * FROM users
+                WHERE id = ?
+                ''', (buyer,)).fetchone()
+            return user
+
+    def update_bought_post(self):
+        with DB() as db:
+            buyer = (
+                self.post_id,
+                self.user_bought
+            )
+            db.execute('''
+                        UPDATE posts SET user_bought = ?, is_active = False
+                         WHERE post_id = ?''', buyer)
+            return self
+
     def edit(self):
         with DB() as db:
             db.execute('''

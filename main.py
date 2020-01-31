@@ -101,5 +101,16 @@ def print_hello(id):
     return render_template("index.html", User = username, Post = Post.all())
 
 
+@app.route("/<int:id>/my_sold_posts/", methods = ['GET'])
+def my_sold_posts(id):
+    return render_template("my_sold_posts.html", User = User.find_by_id(id), Post = Post.all())
+
+
+@app.route("/<int:id>/buy/<int:post_id>/")
+def buy_post(post_id, id):
+    Post(post_id, None, None, None, None, None, None, user_bought = id).update_bought_post()
+    return redirect('/{}/'.format(id))
+
+
 if __name__ == '__main__':
     app.run(debug=True)
