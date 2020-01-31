@@ -13,7 +13,10 @@
                     <p>{{Post.title}}</p>
                     <p>{{Post.description}}</p>
                     <p>{{Post.date}}</p>
-                    <p>{{Post.user_bought}}</p>
+                    <p>{{User.find_by_id(Post.user_bought).username}}</p>
+                    <p>{{User.find_by_id(Post.user_bought).email}}</p>
+                    <p>{{User.find_by_id(Post.user_bought).address}}</p>
+                    <p>{{User.find_by_id(Post.user_bought).telephone_number}}</p>
                 {%endif%}
             </div>
         {%endfor%}
