@@ -14,10 +14,12 @@
                     <p>{{Post.description}}</p>
                     <p>{{Post.price}}</p>
                     <p>{{Post.date}}</p>
+                    {%if Post.is_active != False%}
                     <form  class="delete" action="/{{Post.post_id}}/delete/" method="POST">
                         <button type="submit">Delete</button>
                     </form>
                         <button type="button" onclick="location.href = '/{{Post.post_id}}/edit_post/{{User.id}}/'">Edit</button>
+                    {%endif%}
                 </div>
             {%endif%}
         {%endfor%}
