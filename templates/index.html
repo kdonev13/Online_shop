@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+</head>
+<body>
+    <div>
+        {%if User == None%}
+        <h1>Online shop</h1>
+        <button type="button" onclick="location.href = '/login'">Login</button>
+        <button type="button" onclick="location.href = '/register'">Register</button>
+        <button type="button">All posts</button>
+        {%endif%}
+        {%if User != None%}
+                <h1>Online shop</h1>
+                <h2>You are {{User.username}}!</h2>
+                <button type="button" onclick="location.href = '/{{User.id}}/my_posts/'">My posts</button>
+                <button type="button" onclick="location.href = '/{{User.id}}/add_post/'">Add post</button>
+                <button type="button" onclick="location.href = '/'">Log out</button>
+                <p>All posts</p>
+        {%endif%}
+    </div>
+        {%for Post in posts %}
+            <div>
+                <p>{{Post.find_owner(Post.owner)}}</p>
+
+                <p>{{Post.title}}</p>
+                <p>{{Post.description}}</p>
+                <p>{{Post.price}}</p>
+                <p>{{Post.date}}</p>
+            </div>
+        {%endfor%}
+</body>
+</html>

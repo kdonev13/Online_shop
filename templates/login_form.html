@@ -2,39 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="./static/css/login_form.css">
+    <link rel="stylesheet" href="../static/css/login_form.css">
 </head>
 <body>
-<script>
-  function login() {
-    var email = document.getElementById('email').value;
-    var password = document.getElementById('password').value;
-
-    var request = new XMLHttpRequest();
-    request.open("POST", '/login', true);
-    request.onload = function() {
-      var token = JSON.parse(request.responseText).token;
-      if (token != null) {
-        document.cookie = 'token=' + token + ';';
-        document.location = '/';
-      } else {
-        alert('WRONG!');
-      }
-
-    }
-    request.send(JSON.stringify({
-        email: email,
-        password: password
-    }));
-  }
-</script>
 
 <div class="login-page">
   <div class="form">
-    <form class="login-form" action="/login">
-      <input type="text" id="email" placeholder="email"/>
-      <input type="password" id="password" placeholder="password"/>
-      <button type="button" onclick="login()">Login</button>
+    <form class="login-form" action="/login/" method="POST">
+      <input type="text" name="email" placeholder="email"/>
+      <input type="password" name="password" placeholder="password"/>
+      <button onclick="location.href = '/<int:id>/'">Login</button>
       <p class="message">Not registered? <a href="/register">Create an account</a></p>
     </form>
   </div>
